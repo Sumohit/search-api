@@ -31,15 +31,20 @@ public class SearchServiceImpl implements SearchService{
 	public Optional<List<Users>> searchUsers(String city, String unit, double radius) throws JsonMappingException, JsonProcessingException, ParseException{
 
 		ResponseEntity<String> response = client.getUsersByLocation(city);
-
 		final ObjectMapper objectMapper = new ObjectMapper();
+		
+//		if(radius == 0.0) {
+//			return Optional.of(objectMapper.readValue(response.getBody().toString(), new TypeReference<List<Users>>(){})); 
+//		}
+		
 		List<Users> userList = transformSearchResponse(objectMapper.readValue(response.getBody().toString(), new TypeReference<List<Users>>(){}), getLatlonOfGivenCity(city), unit, radius);
 
-		System.out.println(userList);
 		return Optional.of(userList);
 	}
 
-	// This Method is used to get the lat and lon of a given city using google api.
+	/*
+	 * This Method is used to get the lat and lon of a given city using google api.
+	 */
 	private Map<String,Object> getLatlonOfGivenCity(String city) throws JsonMappingException, JsonProcessingException, ParseException {
 
 		ResponseEntity<String> getlatlonRes = client.getlatlon(city);
@@ -65,7 +70,9 @@ public class SearchServiceImpl implements SearchService{
 		return results;		
 	}
 
-	// This method will transform the search result into required output
+	/*
+	 *  This method will transform the search result into required output
+	 */
 	private List<Users>transformSearchResponse(List<Users> userList, Map<String,Object> geoLocation, String unit, double radius){
 		List<Users> newUserList = new ArrayList<Users>();
 
@@ -87,8 +94,11 @@ public class SearchServiceImpl implements SearchService{
 		return newUserList;
 	}
 
-	// This method will calculate the distance between given two lat & lon.
-	// using Haversine formula - Distance, d = 3963.0 * arccos[(sin(lat1) * sin(lat2)) + cos(lat1) * cos(lat2) * cos(long2 – long1)]
+	/* 
+	 * This method will calculate the distance between given two lat & lon.
+	 * using Haversine formula - 
+	 * Distance, d = 3963.0 * arccos[(sin(lat1) * sin(lat2)) + cos(lat1) * cos(lat2) * cos(long2 – long1)]
+	 */
 	private double calculateDistance(double lat1, double lon1, double lat2, double lon2, String unit) {
 		double distance = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(lon1 - lon2));
 		distance = Math.acos(distance);
