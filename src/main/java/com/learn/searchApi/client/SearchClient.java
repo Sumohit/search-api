@@ -13,7 +13,7 @@ public class SearchClient {
 
 	private final String SEARCH_URL = "https://bpdts-test-app.herokuapp.com/city/";
 	private final String GOOGLE_API_SEARCH_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
-	private final String API_KEY = "AIzaSyCrPduvyJfjLRiGwzdXDvPhQXKyxj0zono";
+	private final String API_KEY = "ADD_YOUR_GOOGLE_API_KEY_HERE";
 	private RestTemplate restTemplate = new RestTemplate();
 	private HttpHeaders headers = new HttpHeaders();
 	
